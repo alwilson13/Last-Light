@@ -122,27 +122,29 @@ public class EnemySpawner : MonoBehaviour
                 spawnPosition,
                 Quaternion.identity
             );
+
+            SpawnIndicatorRing ring =
+                request.indicator.GetComponent<SpawnIndicatorRing>();
+
+            if (ring != null)
+            {
+                ring.StartIndicator(indicatorDuration);
+            }
+            else
+            {
+                SpawnIndicator indicator =
+                    request.indicator.GetComponent<SpawnIndicator>();
+
+                if (indicator != null)
+                {
+                    indicator.StartIndicator(indicatorDuration);
+                }
+            }
+
+            yield return new WaitForSeconds(
+                Mathf.Max(0f, indicatorDuration)
+            );
         }
-
-        SpawnIndicatorRing ring =
-            request.indicator.GetComponent<SpawnIndicatorRing>();
-
-        if (ring != null)
-        {
-            ring.StartIndicator(indicatorDuration);
-        }
-        else
-        {
-            SpawnIndicator indicator =
-                request.indicator.GetComponent<SpawnIndicator>();
-
-            if (indicator != null)
-                indicator.StartIndicator(indicatorDuration);
-        }
-
-        yield return new WaitForSeconds(
-            Mathf.Max(0f, indicatorDuration)
-        );
 
         if (request.indicator != null)
         {
@@ -151,7 +153,6 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject enemy = null;
 
-        // Check again in case the player moved into the warning area.
         if (enemyPrefab != null && IsSafePosition(spawnPosition))
         {
             enemy = Instantiate(

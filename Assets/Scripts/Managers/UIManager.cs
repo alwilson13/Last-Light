@@ -2,10 +2,14 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// Handles Last Light's HUD, launch menu, pause, and end screens.
 public class UIManager : MonoBehaviour
 {
+    [Header("Health Bar")]
+    [SerializeField] private Slider healthBar;
+
     [Header("HUD Text")]
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private TMP_Text batteryText;
@@ -176,6 +180,13 @@ public class UIManager : MonoBehaviour
     {
         if (healthText != null)
             healthText.text = $"Health: {current} / {maximum}";
+
+        if (healthBar != null)
+        {
+            healthBar.minValue = 0;
+            healthBar.maxValue = maximum;
+            healthBar.value = current;
+        }
     }
 
     private void UpdateBattery(float current, float maximum)
